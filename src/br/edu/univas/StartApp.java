@@ -48,8 +48,26 @@ public class StartApp {
         conteudoLivro[1] = scanner.nextLine();
         System.out.print("Por favor, digite a área de interesse: ");
         conteudoLivro[2] = scanner.nextLine();
-        biblioteca.CadastrarBiblioteca(conteudoLivro[0].trim(),String.valueOf(numeroPaginas).trim(),conteudoLivro[1].trim(),conteudoLivro[2].trim(), url);
-        System.out.println(conteudoLivro[0] + " - Livro Cadastrado");
+
+        List<String> existentes = biblioteca.LinhaExistentes(url);
+        if(existentes.size() == 1){
+            biblioteca.CadastrarBiblioteca(conteudoLivro[0].trim(), String.valueOf(numeroPaginas).trim(), conteudoLivro[1].trim(), conteudoLivro[2].trim(), url);
+            System.out.println(conteudoLivro[0] + " - Livro Cadastrado");
+        } else {
+            boolean encontrado = false;
+            for (int i = 1; i < existentes.size(); i++) {
+                if (existentes.get(i).split(",")[0].trim().equalsIgnoreCase(conteudoLivro[0].trim()) && existentes.get(i).split(",")[1].trim().equalsIgnoreCase(String.valueOf(numeroPaginas).trim()) && existentes.get(i).split(",")[2].trim().equalsIgnoreCase(conteudoLivro[1].trim()) && existentes.get(i).split(",")[3].trim().equalsIgnoreCase(conteudoLivro[2].trim())) {
+                    encontrado = true;
+                    break;
+                }
+            }
+            if(encontrado)
+                System.out.println("Livro duplicado! \n");
+            else {
+                biblioteca.CadastrarBiblioteca(conteudoLivro[0].trim(), String.valueOf(numeroPaginas).trim(), conteudoLivro[1].trim(), conteudoLivro[2].trim(), url);
+                System.out.println(conteudoLivro[0] + " - Livro Cadastrado");
+            }
+        }
     }
 
     public static void buscarLivro(String url, Scanner scanner, Biblioteca biblioteca) {
@@ -126,9 +144,6 @@ public class StartApp {
             for (int i = 0; i < livro.length; i++) {
                 System.out.print("Por favor, digite o(a) " + estruturaLivro[i] + ": ");
                 livro[i] = scanner.nextLine();
-                if (livro[i].trim().equalsIgnoreCase(estruturaLivro[i].trim())) {
-                    excluirLivro(url, scanner, biblioteca);
-                }
             }
             boolean encontrado = false;
             for (int i = 1; i < existentes.size(); i++) {
