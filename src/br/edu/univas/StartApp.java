@@ -13,6 +13,9 @@ public class StartApp {
         Scanner scanner = new Scanner(System.in);
         Biblioteca biblioteca = new Biblioteca();
         boolean start = true;
+        if(!Biblioteca.ArquivoExiste(url)) {
+            biblioteca.CriarArquivo(url);
+        }
         do {
             System.out.println("""
                     Seja bem-vindo a biblioteca, escolha uma das funcionalidades:\s
@@ -31,8 +34,8 @@ public class StartApp {
                 }
                 case 1 -> cadastrarLivro(url, scanner, biblioteca, existentes);
                 case 2 -> excluirLivro(url, scanner, biblioteca, existentes);
-                case 3 -> buscarLivro(url, scanner, existentes);
-                case 4 -> gerarRelatorio(url, existentes);
+                case 3 -> buscarLivro(scanner, existentes);
+                case 4 -> gerarRelatorio(existentes);
             }
         } while(start);
         scanner.close();
@@ -69,11 +72,10 @@ public class StartApp {
         }
     }
 
-    public static void buscarLivro(String url, Scanner scanner, List<String> existentes) {
+    public static void buscarLivro(Scanner scanner, List<String> existentes) {
         if (existentes.size() == 1)
             System.out.println("Cadastre pelo menos um livro! \n");
         else {
-            if (Biblioteca.ArquivoExiste(url)) {
                 scanner.nextLine();
                 System.out.print("""
                         Qual será a forma de busca para o livro?\s
@@ -86,8 +88,6 @@ public class StartApp {
                 else if (escolha == 2) buscaPorNomeAutor(scanner, existentes);
                 else if (escolha == 3) buscaPorAreaInteresse(scanner, existentes);
                 else System.out.println("Escolha Incorreta!");
-            } else
-                System.out.println("Biblioteca não cadastrada! \n");
         }
     }
 
@@ -136,7 +136,6 @@ public class StartApp {
         if (existentes.size() == 1)
             System.out.println("Cadastre pelo menos um livro! \n");
         else {
-            if (Biblioteca.ArquivoExiste(url)) {
                 String[] livro = new String[4];
                 String[] estruturaLivro = {
                         "Nome do Livro",
@@ -158,21 +157,16 @@ public class StartApp {
                     }
                 }
                 if (!encontrado) System.out.println("Livro não encontrado! \n");
-            } else
-                System.out.println("Biblioteca não cadastrada! \n");
         }
     }
 
-    public static void gerarRelatorio(String url, List<String> existentes) {
+    public static void gerarRelatorio(List<String> existentes) {
         if (existentes.size() == 1)
             System.out.println("Cadastre pelo menos um livro! \n");
         else {
-            if (Biblioteca.ArquivoExiste(url)) {
                 for (String livro : existentes) {
                     System.out.println(livro);
                 }
-            } else
-                System.out.println("Biblioteca não cadastrada! \n");
         }
     }
 }

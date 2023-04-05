@@ -46,18 +46,18 @@ public class Biblioteca {
         }
         return unicaLinha.toString();
     }
-    public static boolean isFileExists(File arquivo) {
+    public static boolean retornaExistenciaDoArquivo(File arquivo) {
         return arquivo.exists() && !arquivo.isDirectory();
     }
 
     public static boolean ArquivoExiste(String url){
         File file = new File(url);
-        return isFileExists(file);
+        return retornaExistenciaDoArquivo(file);
     }
     public void CriarArquivo(String url) {
         File arquivo = new File(url);
         try {
-            if (!arquivo.exists()) {
+            if (!retornaExistenciaDoArquivo(arquivo)) {
                 arquivo.createNewFile();
                 CadastrarBiblioteca("nome_do_livro".trim(),"numero_de_paginas".trim(),"nome_do_autor".trim(),"area_de_interesse".trim(), url);
             }
